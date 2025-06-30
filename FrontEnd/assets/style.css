@@ -162,6 +162,7 @@ article {
 	text-align: center;
 	margin-bottom: 50px;
 }
+
 /* Filter buttons by categories */
 .categories {
 	display: flex;
@@ -189,6 +190,7 @@ article {
 	background-color: #1D6154;
 }
 /** End filter buttons **/
+
 .gallery {
 	width: 100%;
 	display: grid;
@@ -199,6 +201,7 @@ article {
 .gallery img {
 	width: 100%;
 }
+
 
 #contact, #login {
 	width: 380px;
@@ -248,6 +251,7 @@ input[type="submit"]:hover{
 	background-color: black;
 }
 
+
 footer {
 	width: 100vw;
 	height: 60px;
@@ -278,4 +282,12 @@ footer nav li{
 	margin-top: -12px;
 	margin-bottom: 350px;
 	text-decoration: underline;
+}
+#msgError {		
+	text-align: center;
+	margin-top: 30px;
+	font-size: 16px;
+	color: red;
+	font-weight: 700;
+	display: none;
 }
