@@ -91,3 +91,27 @@ fetch("http://localhost:5678/api/categories")
     })
 
 
+/* Mode edition */
+
+console.log(localStorage)
+//localStorage.clear()
+
+const divModifier = document.getElementById("modifier")
+const navLogin = document.getElementById("login")
+const navLogout = document.getElementById("logout")
+const divEdition = document.getElementById("modeEdition")
+
+/* Vérification de la présence du Token*/
+if (localStorage.length > 0) {
+    /* Transformation de la page d'accueil en page d'édition */
+    divModifier.classList.remove("hidden")
+    navLogin.classList.add("hidden")
+    navLogout.classList.remove("hidden")
+    navCat.classList.add("hidden")
+    divEdition.classList.remove("hidden")
+}
+
+navLogout.addEventListener("click", function() {
+        localStorage.removeItem("1")
+        window.location.reload()
+    })

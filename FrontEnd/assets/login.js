@@ -63,7 +63,7 @@ form.addEventListener("submit", function(event) {
       //console.log(localStorage)
       //localStorage.clear()
       
-      /* redirige l'utilisateur vers la page d'accueil */
+      /* redirige l'utilisateur vers la page d'accueil en mode édition */
       window.location.replace("../index.html")
 
     } else {

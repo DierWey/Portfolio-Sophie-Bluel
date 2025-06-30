@@ -8,21 +8,28 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
+	<script src="https://kit.fontawesome.com/d5dcf482a1.js" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="./assets/style.css">	
 	<script src="./assets/index.js" defer></script>
 	<!-- <script src="./assets/test.js" defer></script> -->
 </head>
 <body>
 <header>
-	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
-	<nav>
-		<ul>
-			<li><a href="#portfolio">projets</a></li>
-			<li><a href="#contact">contact</a></li>
-			<li><a href="./assets/login.html">login</a></li>
-			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
-		</ul>
-	</nav>
+	<div id="modeEdition" class="hidden">
+		<i class="fa-regular fa-pen-to-square"></i>Mode édition
+	</div>
+
+	<div class="header">
+		<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
+		<nav>
+			<ul>
+				<li><a href="#portfolio">projets</a></li>
+				<li><a href="#contact">contact</a></li>
+				<li><a href="./assets/login.html" id="login">login</a><span id="logout" class="hidden">logout</span></li>
+				<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
+			</ul>
+		</nav>
+	</div>
 </header>
 <main>
 	<section id="introduction">
@@ -37,7 +44,12 @@
 		</article>
 	</section>
 	<section id="portfolio">
-		<h2>Mes Projets</h2>
+		<div class="projetsTitre">
+			<h2>Mes projets</h2> 
+			<div id="modifier" class="projetsTitre_modifier hidden">
+				<i class="fa-regular fa-pen-to-square"></i>modifier
+			</div>
+		</div>
 		<nav class="categories">
 			
 		</nav>
