@@ -1,17 +1,3 @@
-/* A faire (d'après Kaban) :
-OK- En suivant la maquette, intégrer le formulaire de connexion au site. -OK
-Ok- Lorsque le couple identifiant et mot de passe n’est pas bon pour se connecter il faut afficher le message d’erreur: 
-“Erreur dans l’identifiant ou le mot de passe” -Ok
-Lorsque le couple identifiant et mot de passe est correct : 
-Rediriger vers la page du site avec cette fois-ci des boutons d’actions pour éditer le site. */
-
-/* Compte de test pour Sophie Bluel
-|-----------------------|-----------|
-|email :                |password : |
-|sophie.bluel@test.tld  |S0phie     |
-|-----------------------|-----------| */
-
-
 /* Récupération des infos du formulaire*/
 const form = document.querySelector("form")
 
@@ -50,16 +36,13 @@ form.addEventListener("submit", function(event) {
     if (responseStatus === 200) {
       // console.log("ça fonctionne")    
       
-      /* Stockage du token dans le local storage 
-      Utilisation de sessionStorage plutôt que localStorage ?*/
+      /* Stockage du token dans le local storage */
       //console.log(response)
       const userInfos = (await response).json()
       //console.log(userInfos)
       const userToken = (await userInfos).token
       //console.log(userToken)
-      const userID = (await userInfos).userId
-      //console.log(userID)
-      localStorage.setItem(userID, userToken)
+      localStorage.setItem("Token", userToken)
       //console.log(localStorage)
       //localStorage.clear()
       
