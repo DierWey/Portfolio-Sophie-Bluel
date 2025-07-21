@@ -138,7 +138,14 @@ navLogout.addEventListener("click", function() {
 const modal = document.getElementById("modal")
 const modalBodies = document.querySelector(".modal-body")
 const ouvrirModal = document.getElementById("modifier")
+
+const modalGallery = document.getElementById("modalGallery")
 const fermerModalIcone = document.getElementById("fermerModal")
+
+const modalAjout = document.getElementById("modalAjout")
+const buttonAjout = document.getElementById("buttonAjout")
+const flecheRetour = document.getElementById("flecheRetour")
+const fermerModalIcone2 = document.getElementById("fermerModal2")
 
 
 function toggleModal() {
@@ -148,19 +155,16 @@ const stopPropagation = function (e) {
     e.stopPropagation ()
 }
 
-// Fermeture de la modale au clic en dehors de la fenetre modale active
-/* modal.addEventListener("click", toggleModal)
-modalBodies.addEventListener("click", stopPropagation) */
-
+// Ouverture de la modale au clic sur "modifier"
 ouvrirModal.addEventListener("click", toggleModal)
+
+// Fermeture de la modale au clic en dehors de la fenetre modale active
+modal.addEventListener("click", toggleModal)
+modalGallery.addEventListener("click", stopPropagation)
+modalAjout.addEventListener("click", stopPropagation)
+
+// Fermeture de la modale au clic sur l'icone x
 fermerModalIcone.addEventListener("click", toggleModal)
-
-
-const modalGallery = document.getElementById("modalGallery")
-const modalAjout = document.getElementById("modalAjout")
-const buttonAjout = document.getElementById("buttonAjout")
-const flecheRetour = document.getElementById("flecheRetour")
-const fermerModalIcone2 = document.getElementById("fermerModal2")
 
 function toggleAjout() {
     modalAjout.classList.toggle("hidden")
