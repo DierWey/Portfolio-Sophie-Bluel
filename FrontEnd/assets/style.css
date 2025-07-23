@@ -517,6 +517,12 @@ h3 {
 	font-size: 11px;
 	color: #6C6C6C;
 }
+#msgErrorForm {
+	font-size: 15px;
+	color: red;
+	margin-top: 16px;
+	margin-bottom: -24px;
+}
 #buttonValidate {
 	width: 237px;
 	height: 36px;

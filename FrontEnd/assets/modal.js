@@ -33,14 +33,17 @@ fetch("http://localhost:5678/api/works")
 
 /** ----- Suppression des travaux ----- **/
 
-//Déclaration de la fonction deleteElement appelée lorsqu'on click sur l'icone trash-can (ligne 26)
+// Déclaration de la fonction deleteElement appelée lorsqu'on click sur l'icone trash-can (ligne 26)
 function deleteElement(event) {
     event.preventDefault()
-    //Récupération de l'id de l'element
+    // Récupération de l'id de l'element cliqué (icone trash-can)
     let clickedTrashId = event.srcElement.id
-    console.log(clickedTrashId)
     let id = clickedTrashId.slice(6)
-    console.log(id)
+    // Récupération de la <div> parente de l'icone trash-can en vue de sa supression du DOM
+    let trashDiv = document.getElementById(clickedTrashId).parentElement
+    // Récupération de la <figure> parente de l'image de la galerie en vue de sa supression du DOM
+    let imageGalleryFigure = document.getElementById(id).parentElement
+
     // Maintenant qu'on a l'id, on peut faire le Fetch (ciblé sur cet id) qui va lui appliquer
     // la méthode Delete...
     fetch(`http://localhost:5678/api/works/${id}`, {
@@ -54,13 +57,14 @@ function deleteElement(event) {
     })
     .then((response) => {
         if (response.ok) {
-        console.log("image supprimée")
-        location.reload()
+        //Suppression de l'image dans la galerie de la fenêtre modale (en supprimant sa <div> parente)
+        trashDiv.remove()
+        //Suppression de l'image dans la galerie principale (en supprimant sa <figure> parente)
+        imageGalleryFigure.remove()
+        console.log("L'image a été supprimée")
         }
     })
 }
-
-
 
 
 /*********************************/
@@ -95,8 +99,7 @@ const photoInfos = document.getElementById("photoAdd-infos")
 
 const formAjout = document.querySelector("#modalForm")
 
-//Déclaration de la fonction qui cachent/affichent les divers éléments de la <div> #photoAdd-container
-
+//Déclaration de la fonction qui cache/affiche les divers éléments de la <div> #photoAdd-container
 function showElement(el, show) {
     if(show) {
         el.classList.remove("hidden")
@@ -122,13 +125,13 @@ imgFile.addEventListener("change", function() {
     if (selectedFile !== null) {
         showElement(imgPreview, true)
         showElement(buttonAdd, false)
-        showElement(IconeImage, false)
-        showElement(PhotoInfos, false)
+        showElement(iconeImage, false)
+        showElement(photoInfos, false)
     } else {
         showElement(imgPreview, false)
         showElement(buttonAdd, true)
-        showElement(IconeImage, true)
-        showElement(PhotoInfos, true)
+        showElement(iconeImage, true)
+        showElement(photoInfos, true)
     }
 })         
 
@@ -158,6 +161,15 @@ formAjout.addEventListener("change", function() {
 
 
 /** ----- Envoi de nouveaux travaux ----- **/
+
+function resetForm() {    
+    document.getElementById("modalForm").reset()
+    document.getElementById("photoAdd-button").classList.remove("hidden")
+    document.getElementById("iconeImage").classList.remove("hidden")
+    document.getElementById("photoAdd-infos").classList.remove("hidden")
+    document.getElementById("photoAdd-preview").src=""
+    document.getElementById("msgErrorForm").classList.add("hidden")
+}
     
 //Ecoute de l'évènement submit
 formAjout.addEventListener("submit", function(event) {
@@ -184,9 +196,27 @@ formAjout.addEventListener("submit", function(event) {
         },
         body: formData,
     }) 
-    .then((res) => {
-    console.log(res)
-    document.getElementById("modalForm").reset()
-    location.reload()
+    .then((response) => {
+        console.log(response)
+        let responseStatus = (response).status
+        console.log(responseStatus)
+
+        if (responseStatus === 400) {
+            console.log("Error 400")
+            let msgErrorForm = document.getElementById("msgErrorForm")
+            msgErrorForm.classList.remove("hidden")
+            msgErrorForm.textContent = "Le formulaire n'est pas correctement rempli."
+            
+        } else {
+            resetForm()
+            document.getElementById("msgErrorForm").classList.add("hidden")
+            //location.reload()
+
+
+
+            console.log("L'image a été ajoutée à la galerie")
+        } 
+    
     })    
 })
+

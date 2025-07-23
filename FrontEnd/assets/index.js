@@ -2,15 +2,14 @@
 // Creation dynamique de la galerie //
 /*************************************/
 
-    //Fetch des travaux (works)
+//Fetch des travaux (works)
 fetch("http://localhost:5678/api/works")
     .then((reponse) => reponse.json())
     .then((works) => {
         
-        //Création des galeries
+        //Création de la galerie de la page d'accueil
         for (i=0; i<works.length; i++) {
 
-            //Galerie page d'accueil
             let figure = document.createElement("figure")
             figure.classList.add(works[i].categoryId)
             let divGallery = document.querySelector(".gallery")
@@ -19,6 +18,7 @@ fetch("http://localhost:5678/api/works")
             let img = document.createElement("img")
             img.src = works[i].imageUrl
             img.alt = works[i].title
+            img.id = works[i].id
             figure.appendChild(img)
 
             let figcaption = document.createElement("figcaption")
@@ -33,7 +33,7 @@ fetch("http://localhost:5678/api/works")
 //Creation dynamique du menu de catégories//
 /******************************************/
 
-    //Creation du bouton "Tous"
+//Creation du bouton "Tous"
 const navCat = document.querySelector(".categories")
 let divCatAll = document.createElement("div")
 divCatAll.classList.add("catButton")
@@ -42,7 +42,7 @@ divCatAll.setAttribute("id", "0")
 divCatAll.innerText = "Tous"
 navCat.appendChild(divCatAll)
 
-    //Fetch des catégories (categories)
+//Fetch des catégories (categories)
 fetch("http://localhost:5678/api/categories")
     .then((reponse) => reponse.json())
     .then((categories) => {
@@ -132,60 +132,76 @@ navLogout.addEventListener("click", function() {
 
 
 /***********************************************/
-/* Ouverture et fermeture de la fenêtre modale */
+/* Ouverture et fermeture des fenêtres modales */
 /***********************************************/
 
 const modal = document.getElementById("modal")
-const modalBodies = document.querySelector(".modal-body")
 const ouvrirModal = document.getElementById("modifier")
 
 const modalGallery = document.getElementById("modalGallery")
+const buttonAjout = document.getElementById("buttonAjout")
 const fermerModalIcone = document.getElementById("fermerModal")
 
 const modalAjout = document.getElementById("modalAjout")
-const buttonAjout = document.getElementById("buttonAjout")
 const flecheRetour = document.getElementById("flecheRetour")
 const fermerModalIcone2 = document.getElementById("fermerModal2")
 
-
-function toggleModal() {
-    modal.classList.toggle("hidden")
-}
 const stopPropagation = function (e) {
     e.stopPropagation ()
 }
 
-// Ouverture de la modale au clic sur "modifier"
-ouvrirModal.addEventListener("click", toggleModal)
-
-// Fermeture de la modale au clic en dehors de la fenetre modale active
-modal.addEventListener("click", toggleModal)
-modalGallery.addEventListener("click", stopPropagation)
-modalAjout.addEventListener("click", stopPropagation)
-
-// Fermeture de la modale au clic sur l'icone x
-fermerModalIcone.addEventListener("click", toggleModal)
-
+function toggleModal() {
+    modal.classList.toggle("hidden")
+}
 function toggleAjout() {
     modalAjout.classList.toggle("hidden")
 }
 function toggleGallery() {
     modalGallery.classList.toggle("hidden")
 }
+function resetForm() {    
+    document.getElementById("modalForm").reset()
+    document.getElementById("photoAdd-button").classList.remove("hidden")
+    document.getElementById("iconeImage").classList.remove("hidden")
+    document.getElementById("photoAdd-infos").classList.remove("hidden")
+    document.getElementById("photoAdd-preview").src=""
+}
+function modalDefault() {
+    modalGallery.classList.remove("hidden")
+    modalAjout.classList.add("hidden")
+}
 
+// Ouverture de la modale au clic sur "modifier"
+ouvrirModal.addEventListener("click", toggleModal)
+
+// Fermeture de la modale au clic en dehors de la fenetre modale active
+modal.addEventListener("click", function() {
+    toggleModal()
+    resetForm()
+    modalDefault()
+})
+modalGallery.addEventListener("click", stopPropagation)
+modalAjout.addEventListener("click", stopPropagation)
+
+// Fermeture de la modale au clic sur l'icone x de la première fenêtre modale
+fermerModalIcone.addEventListener("click", toggleModal)
+
+// Fermeture de la première fenêtre modale et ouverture de la deuxième fenêtre modale
+// au clic sur le bouton "Ajouter une photo"
 buttonAjout.addEventListener("click", function() {
     toggleAjout()
     toggleGallery()
 })
+
+// Fermeture de la deuxième fenêtre modale et ouverture de la première au clic sur la flêche
 flecheRetour.addEventListener("click", function() {
-    toggleAjout()
-    toggleGallery()
-    document.getElementById("modalForm").reset()
+    resetForm()
+    modalDefault()
 })
 
+// Fermeture de la modale au clic sur l'icone x de la deuxième fenêtre modale
 fermerModalIcone2.addEventListener("click", function() {
     toggleModal()
-    toggleAjout()
-    toggleGallery()
-    document.getElementById("modalForm").reset()
+    resetForm()
+    modalDefault()
 })
