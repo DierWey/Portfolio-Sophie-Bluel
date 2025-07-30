@@ -11,22 +11,23 @@ fetch("http://localhost:5678/api/works")
         
         //Création de la galerie de la modale
         for (i=0; i<works.length; i++) {
-            const galleryMiniElements = document.createElement("div")
-            galleryMiniElements.classList.add(works[i].categoryId)
+            //Création dynamique de la <div> qui va contenir l'image et de son id de catégorie
+            const figureModalGallery = document.createElement("figure")
+            figureModalGallery.classList.add(works[i].categoryId)
             const divGalleryMini = document.querySelector(".gallery-mini")
-            divGalleryMini.appendChild(galleryMiniElements)
-
+            divGalleryMini.appendChild(figureModalGallery)
+            //Création dynamique de la balise <img> avec sa src et son alt
             const img = document.createElement("img")
             img.src = works[i].imageUrl
             img.alt = works[i].title
-            galleryMiniElements.appendChild(img)
-
+            figureModalGallery.appendChild(img)
+            //Création dynamique de l'icone poubelle
             const icone = document.createElement("i")
-            //Attribution à l'icone poubelle d'un id qui reprend celui de son image correspondante
+                //Attribution à l'icone poubelle d'un id qui reprend celui de son image correspondante
             icone.setAttribute("id", "trash_"+works[i].id)
+                //
             icone.onclick=deleteElement
-            galleryMiniElements.appendChild(icone)
-            .classList.add("fa-solid", "fa-trash-can")
+            figureModalGallery.appendChild(icone).classList.add("fa-solid", "fa-trash-can")
         }
     })
 
@@ -39,8 +40,8 @@ function deleteElement(event) {
     // Récupération de l'id de l'element cliqué (icone trash-can)
     let clickedTrashId = event.srcElement.id
     let id = clickedTrashId.slice(6)
-    // Récupération de la <div> parente de l'icone trash-can en vue de sa supression du DOM
-    let trashDiv = document.getElementById(clickedTrashId).parentElement
+    // Récupération de la <figure> parente de l'icone trash-can en vue de sa supression du DOM
+    let trashFigure = document.getElementById(clickedTrashId).parentElement
     // Récupération de la <figure> parente de l'image de la galerie en vue de sa supression du DOM
     let imageGalleryFigure = document.getElementById(id).parentElement
 
@@ -57,8 +58,8 @@ function deleteElement(event) {
     })
     .then((response) => {
         if (response.ok) {
-        //Suppression de l'image dans la galerie de la fenêtre modale (en supprimant sa <div> parente)
-        trashDiv.remove()
+        //Suppression de l'image dans la galerie de la fenêtre modale (en supprimant sa <figure> parente)
+        trashFigure.remove()
         //Suppression de l'image dans la galerie principale (en supprimant sa <figure> parente)
         imageGalleryFigure.remove()
         console.log("L'image a été supprimée")
@@ -162,6 +163,7 @@ formAjout.addEventListener("change", function() {
 
 /** ----- Envoi de nouveaux travaux ----- **/
 
+// Déclaration de la fonction qui reset les différents éléments du formulaire
 function resetForm() {    
     document.getElementById("modalForm").reset()
     document.getElementById("photoAdd-button").classList.remove("hidden")
@@ -171,7 +173,7 @@ function resetForm() {
     document.getElementById("msgErrorForm").classList.add("hidden")
 }
     
-//Ecoute de l'évènement submit
+// Ecoute de l'évènement submit
 formAjout.addEventListener("submit", function(event) {
 
     // On empêche le comportement par défaut (l'envoi sera géré dans le code)
@@ -198,7 +200,7 @@ formAjout.addEventListener("submit", function(event) {
     }) 
     .then((response) => {
         console.log(response)
-        let responseStatus = (response).status
+        let responseStatus = response.status
         console.log(responseStatus)
 
         if (responseStatus === 400) {
@@ -207,14 +209,40 @@ formAjout.addEventListener("submit", function(event) {
             msgErrorForm.classList.remove("hidden")
             msgErrorForm.textContent = "Le formulaire n'est pas correctement rempli."
             
-        } else {
-            resetForm()
-            document.getElementById("msgErrorForm").classList.add("hidden")
-            //location.reload()
+        } 
+        else {
+
+        resetForm()
+        document.getElementById("msgErrorForm").classList.add("hidden")
+        console.log("L'image a été ajoutée à la galerie")
+        //location.reload()
+            
+        let responseJson = response.json()
+        console.log(responseJson)
 
 
 
-            console.log("L'image a été ajoutée à la galerie")
+        /*    // Modification du DOM pour ajouter l'image dans la galerie de la première fenêtre modale
+                //Création dynamique de la <div> qui va contenir l'image et de son id de catégorie
+            const figureModalGallery = document.createElement("figure")
+            figureModalGallery.classList.add(works[i].categoryId)
+            const divGalleryMini = document.querySelector(".gallery-mini")
+            divGalleryMini.appendChild(figureModalGallery)
+                //Création dynamique de la balise <img> avec sa src et son alt
+            const img = document.createElement("img")
+            img.src = works[i].imageUrl
+            img.alt = works[i].title
+            figureModalGallery.appendChild(img)
+                //Création dynamique de l'icone poubelle
+            const icone = document.createElement("i")
+                    //Attribution à l'icone poubelle d'un id qui reprend celui de son image correspondante
+            icone.setAttribute("id", "trash_"+works[i].id)
+                //
+            icone.onclick=deleteElement
+            figureModalGallery.appendChild(icone).classList.add("fa-solid", "fa-trash-can")
+        */    
+
+            
         } 
     
     })    
