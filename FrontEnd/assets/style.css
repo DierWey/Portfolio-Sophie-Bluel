@@ -223,7 +223,7 @@ article {
 
 
 #contact, #login {
-	width: 380px;
+	width: 379px;
 	margin: auto;
 }
 #contact, #login > * {
@@ -242,6 +242,7 @@ article {
 #contact input, #login input {
 	height: 50px;
 	font-size: 14px;
+	padding-left: 16px;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
@@ -268,7 +269,7 @@ input[type="submit"]{
 	max-height: 36px;
 	text-align: center;
 }
-#contact input[type="submit"]:hover, #login input[type="submit"]:hover {
+#contact input[type="submit"]:hover, #login input[type="submit"]:hover, #buttonAjout:hover, .buttonValidateTrue:hover {
 	background-color: black;
 }
 
@@ -471,18 +472,16 @@ h3 {
 }
 .modal-form #titre, .categories-container {
 	height: 51px;
-	width: 100%;
+	width: 404px;
 	font-size: 14px;
+	color: #444444;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 	padding-left: 16px;
 }
-.modal-form label, .modal-form select, .modal-form option {
+.modal-form_label, .modal-form select, .modal-form option, .modal-form #categories, .modal-form #titre {
 	font-family: 'Work Sans';	
 	font-size: 14px;
-}
-.categories-container {
-	width: 100%;
 }
 .categories-container #categories {
 	position: relative;
@@ -495,7 +494,6 @@ h3 {
 	font-size: 14px;
 	cursor: pointer;
 	padding: 0;
-	/* margin-left: 16px; */
 	border: 0;
 }
 #photoAdd-preview {
@@ -508,6 +506,8 @@ h3 {
 	width: 100%;
 	display: flex;
 	justify-content: left;
+	color: #3d3d3d;
+	font-weight: 500;
 }
 .fa-chevron-down {
 	position: relative;

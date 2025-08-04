@@ -1,3 +1,5 @@
+const apiURL = "http://localhost:5678/api/"
+
 /*************************************/
 // Creation dynamique de la galerie //
 /*************************************/
@@ -9,7 +11,7 @@ function resetWorks() {
 
 //Fetch des travaux (works)
 function works() {
-    fetch("http://localhost:5678/api/works")
+    fetch(apiURL + "works")
     .then((reponse) => reponse.json())
     .then((works) => {
         
@@ -43,12 +45,11 @@ function works() {
             imgMini.alt = works[i].title
             figureModalGallery.appendChild(imgMini)
             //Création dynamique de l'icone poubelle
-            const icone = document.createElement("i")
+            const icon = document.createElement("i")
                 //Attribution à l'icone poubelle d'un id qui reprend celui de son image correspondante
-            icone.setAttribute("id", "trash_"+works[i].id)
-                //
-            icone.onclick=deleteElement
-            figureModalGallery.appendChild(icone).classList.add("fa-solid", "fa-trash-can")
+            icon.setAttribute("id", "trash_"+works[i].id)
+            icon.onclick=deleteElement
+            figureModalGallery.appendChild(icon).classList.add("fa-solid", "fa-trash-can")
         }
 
     })
@@ -70,7 +71,7 @@ divCatAll.innerText = "Tous"
 navCat.appendChild(divCatAll)
 
 //Fetch des catégories (categories)
-fetch("http://localhost:5678/api/categories")
+fetch(apiURL + "categories")
     .then((reponse) => reponse.json())
     .then((categories) => {
 
@@ -85,7 +86,6 @@ fetch("http://localhost:5678/api/categories")
 
         //Déclaration de la constante qui regroupe tous les boutons (array)
         const allButtons = document.querySelectorAll(".catButton")
-        //console.log(allButtons)
 
         //Déclaration de la fonction qui enlève la classe catSelected à tous les boutons
         function removeCatSelected(allButtons) {
@@ -106,7 +106,6 @@ fetch("http://localhost:5678/api/categories")
 
                 const baliseGal = document.getElementById("gallery")
                 const allFigures = baliseGal.children
-                console.log(allFigures)
 
                 for (let i=0; i<allFigures.length; i++) {
                     if (allFigures[i].classList[0] == this.id || this.id == 0) {
@@ -125,7 +124,7 @@ fetch("http://localhost:5678/api/categories")
 /* Mode edition */
 /****************/
 
-console.log(localStorage)
+//console.log(localStorage)
 //localStorage.clear()
 
 const divModifier = document.getElementById("modifier")
@@ -136,13 +135,11 @@ const divEdition = document.getElementById("modeEdition")
 /* Vérification de la présence du Token */
 if (localStorage.getItem("Token") !== null) {
     /* Transformation de la page d'accueil en page d'édition */
-    divModifier.classList.remove("hidden") 
     show(divModifier)
-    navLogin.classList.add("hidden")
     hide(navLogin)
-    navLogout.classList.remove("hidden")
-    navCat.classList.add("hidden")
-    divEdition.classList.remove("hidden")
+    show(navLogout)
+    hide(navCat)
+    show(divEdition)
 }
 
 function hide(elm) {
@@ -167,11 +164,11 @@ const ouvrirModal = document.getElementById("modifier")
 
 const modalGallery = document.getElementById("modalGallery")
 const buttonAjout = document.getElementById("buttonAjout")
-const fermerModalIcone = document.getElementById("fermerModal")
+const fermerModalIcon = document.getElementById("fermerModal")
 
 const modalAjout = document.getElementById("modalAjout")
 const flecheRetour = document.getElementById("flecheRetour")
-const fermerModalIcone2 = document.getElementById("fermerModal2")
+const fermerModalIcon2 = document.getElementById("fermerModal2")
 
 const stopPropagation = function (e) {
     e.stopPropagation ()
@@ -189,13 +186,16 @@ function toggleGallery() {
 function resetForm() {    
     document.getElementById("modalForm").reset()
     document.getElementById("photoAdd-button").classList.remove("hidden")
-    document.getElementById("iconeImage").classList.remove("hidden")
+    document.getElementById("iconImage").classList.remove("hidden")
     document.getElementById("photoAdd-infos").classList.remove("hidden")
     document.getElementById("photoAdd-preview").src=""
+    document.getElementById("buttonValidate").classList.remove("buttonValidateTrue")
+    document.getElementById("buttonValidate").classList.add("buttonValidateFalse")
+    document.getElementById("msgErrorForm").classList.add("hidden")
 }
 function modalDefault() {
-    modalGallery.classList.remove("hidden")
-    modalAjout.classList.add("hidden")
+    show(modalGallery)
+    hide(modalAjout)
 }
 
 // Ouverture de la modale au clic sur "modifier"
@@ -211,7 +211,7 @@ modalGallery.addEventListener("click", stopPropagation)
 modalAjout.addEventListener("click", stopPropagation)
 
 // Fermeture de la modale au clic sur l'icone x de la première fenêtre modale
-fermerModalIcone.addEventListener("click", toggleModal)
+fermerModalIcon.addEventListener("click", toggleModal)
 
 // Fermeture de la première fenêtre modale et ouverture de la deuxième fenêtre modale
 // au clic sur le bouton "Ajouter une photo"
@@ -227,7 +227,7 @@ flecheRetour.addEventListener("click", function() {
 })
 
 // Fermeture de la modale au clic sur l'icone x de la deuxième fenêtre modale
-fermerModalIcone2.addEventListener("click", function() {
+fermerModalIcon2.addEventListener("click", function() {
     toggleModal()
     resetForm()
     modalDefault()
@@ -256,7 +256,7 @@ function deleteElement(event) {
 
     // Maintenant qu'on a l'id, on peut faire le Fetch (ciblé sur cet id) qui va lui appliquer
     // la méthode Delete...
-    fetch(`http://localhost:5678/api/works/${id}`, {
+    fetch(apiURL + `works/${id}`, {
         method: "DELETE",
         headers: {
         "accept": "application/json",
@@ -284,7 +284,7 @@ function deleteElement(event) {
 /** ----- Génération dynamique des <options> du <select> "Catégories" ----- **/
 
 //Fetch des catégories (categories)
-fetch("http://localhost:5678/api/categories")
+fetch(apiURL + "categories")
     .then((reponse) => reponse.json())
     .then((categories) => {
         
@@ -304,7 +304,7 @@ fetch("http://localhost:5678/api/categories")
 //récupération des infos du formulaire
 const imgPreview = document.getElementById("photoAdd-preview")
 const buttonAdd = document.getElementById("photoAdd-button")
-const iconeImage = document.getElementById("iconeImage")
+const iconImage = document.getElementById("iconImage")
 const photoInfos = document.getElementById("photoAdd-infos")
 
 const formAjout = document.querySelector("#modalForm")
@@ -335,35 +335,32 @@ imgFile.addEventListener("change", function() {
     if (selectedFile !== null) {
         showElement(imgPreview, true)
         showElement(buttonAdd, false)
-        showElement(iconeImage, false)
+        showElement(iconImage, false)
         showElement(photoInfos, false)
     } else {
         showElement(imgPreview, false)
         showElement(buttonAdd, true)
-        showElement(iconeImage, true)
+        showElement(iconImage, true)
         showElement(photoInfos, true)
     }
 })         
 
 // Changer la couleur du bouton "Valider" quand tous les champs sont remplis
-
 const imageInput = document.getElementById("photoAdd-inpunt")
 const inputImgValue = imageInput.value
-//console.log(inputImgValue)
 const titleInput = document.getElementById("titre")
 const inputTitleValue = titleInput.value
-//console.log(inputTitleValue)
 const categoryInput = document.getElementById("categories")
 const inputCategoryValue = categoryInput.value
-//console.log(inputCategoryValue)
 
 formAjout.addEventListener("change", function() {
     if (imageInput.value !== "" && titleInput.value !== "" && categoryInput.value != 0) {
-        console.log("Le boutton doit être vert")
+        //console.log("Le boutton doit être vert")
         document.getElementById("buttonValidate").classList.remove("buttonValidateFalse")
-        document.getElementById("buttonValidate").classList.add("buttonValidateTrue")
+        document.getElementById("buttonValidate").classList.add("buttonValidateTrue")        
+        document.getElementById("msgErrorForm").classList.add("hidden")
     } else {
-        console.log("Le boutton doit être gris")
+        //console.log("Le boutton doit être gris")
         document.getElementById("buttonValidate").classList.remove("buttonValidateTrue")
         document.getElementById("buttonValidate").classList.add("buttonValidateFalse")
     }
@@ -372,19 +369,6 @@ formAjout.addEventListener("change", function() {
 
 /** ----- Envoi de nouveaux travaux ----- **/
 
-// Déclaration de la fonction qui reset les différents éléments du formulaire
-function resetForm() {    
-    document.getElementById("modalForm").reset()
-    document.getElementById("photoAdd-button").classList.remove("hidden")
-    document.getElementById("iconeImage").classList.remove("hidden")
-    document.getElementById("photoAdd-infos").classList.remove("hidden")
-    document.getElementById("photoAdd-preview").src=""
-    document.getElementById("msgErrorForm").classList.add("hidden")
-
-    document.getElementById("buttonValidate").classList.remove("buttonValidateTrue")
-    document.getElementById("buttonValidate").classList.add("buttonValidateFalse")
-}
-    
 // Ecoute de l'évènement submit
 formAjout.addEventListener("submit", function(event) {
 
@@ -396,12 +380,11 @@ formAjout.addEventListener("submit", function(event) {
     formData.append("title", document.getElementById("titre").value);
     formData.append("category", parseInt(document.getElementById("categories").value))
     formData.append("image", document.getElementById("photoAdd-inpunt").files[0])
-    //console.log(formData)
     const tokenVerif = localStorage.getItem("Token")
     //console.log(tokenVerif)
     
     // Fetch
-    fetch("http://localhost:5678/api/works", {
+    fetch(apiURL + "works", {
         method: "POST",
         headers: { 
             "accept": "application/json",
@@ -411,12 +394,9 @@ formAjout.addEventListener("submit", function(event) {
         body: formData,
     }) 
     .then((response) => {
-        console.log(response)
         let responseStatus = response.status
-        console.log(responseStatus)
 
         if (responseStatus === 400) {
-            console.log("Error 400")
             let msgErrorForm = document.getElementById("msgErrorForm")
             msgErrorForm.classList.remove("hidden")
             msgErrorForm.textContent = "Le formulaire n'est pas correctement rempli."            
@@ -427,7 +407,6 @@ formAjout.addEventListener("submit", function(event) {
         resetForm()
         document.getElementById("msgErrorForm").classList.add("hidden")
         console.log("L'image a été ajoutée à la galerie")
-        //location.reload()
         }    
     })    
 })
